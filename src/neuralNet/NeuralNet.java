@@ -89,7 +89,7 @@ class NeuralNet {
 		return zippedList;
 	}
 
-	static ArrayList<ArrayList<Double>> add(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+	private ArrayList<ArrayList<Double>> add(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
 		for (int index=0; index<A.size();index++){
 			//A.get(index).get(0) = A.get(index).get(0) + B.get(index).get(0);
 			A.get(index).set(0, A.get(index).get(0) + B.get(index).get(0));
@@ -97,7 +97,7 @@ class NeuralNet {
 		return A;
 	}
 
-	static ArrayList<ArrayList<Double>> mul(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+	private ArrayList<ArrayList<Double>> mul(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
 		ArrayList<ArrayList<Double>> response = new ArrayList<ArrayList<Double>>();
 		for (int nodeIndex = 0; nodeIndex<A.size();nodeIndex++){
 			ArrayList<Double> valueList = new ArrayList<Double>();
@@ -121,6 +121,32 @@ class NeuralNet {
 		}
 		return response;
 	}
+	
+	
+	
+	private void gradientDescent(ArrayList<ArrayList<int[]>> data, int iteration, int batchSize, double learningRate){
+		for (int i = 0; i<iteration; i++){
+			Collections.shuffle(data);
+			ArrayList<ArrayList<ArrayList<int[]>>> batches = new ArrayList<ArrayList<ArrayList<int[]>>>();
+			for (int batchIndex = 0; batchIndex < data.size(); batchIndex+=batchSize){
+				ArrayList<ArrayList<int[]>> batch = new ArrayList<ArrayList<int[]>>();
+				for (int dataIndex = 0; dataIndex < data.size(); dataIndex++){
+					batch.add(data.get(dataIndex));
+				}
+				batches.add(batch);
+			}
+			for (ArrayList<ArrayList<int[]>> batch : batches){
+				//updateBatch(batch, learningRate);
+			}
+			System.out.println("Completed iteration "+i );
+		}
+	}
+	
+	
+	
+	
+	
+	
 
 	public ArrayList<ArrayList<Double>> feedForward(ArrayList<ArrayList<Double>> input){
 		for (int layerIndex = 0; layerIndex <sizes.size()-1; layerIndex++){ // layerIndex starts at second layer
@@ -128,4 +154,5 @@ class NeuralNet {
 		}
 		return input;
 	}
+	
 }
