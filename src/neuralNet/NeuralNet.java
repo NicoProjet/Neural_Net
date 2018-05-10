@@ -9,6 +9,10 @@ class NeuralNet {
 	ArrayList<Integer> size;
 	ArrayList<ArrayList<ArrayList<Double>>> biases;
 	ArrayList<ArrayList<ArrayList<Double>>> weights;
+	/* biases = [layer[node[bias[1]]]
+	 * weights = [layer[node[weights[#nodes last layer]]]
+	 */
+	
 
 
 	public NeuralNet(ArrayList<Integer> givenSize){
