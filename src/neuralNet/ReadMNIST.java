@@ -4,8 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-//import org.apache.commons.io.IOUtils;
-import java.lang.Object;
+import org.apache.commons.io.IOUtils;
 
 class ReadMNIST {
 	/*
@@ -18,7 +17,7 @@ class ReadMNIST {
 	public static byte[] readLabels(int numberOfLabels) throws IOException{
 		File MNIST_labels = new File("data/train-labels.idx1-ubyte");
 		InputStream fileStream = new FileInputStream(MNIST_labels);
-		return null;
+		return IOUtils.toByteArray(fileStream, numberOfLabels);
 	}
 
 }
