@@ -1,9 +1,11 @@
 package neuralNet;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
+
 
 class ReadMNIST {
 	public static int imageSize = 28;
