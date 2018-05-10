@@ -71,4 +71,8 @@ class NeuralNet {
 		
 		return zippedList;
 	}
+	private double sigmoid(){
+		//return 1.0 / (1.0 + Math.pow(Math.PI, b));
+		return 1.0;
+	}
 }
