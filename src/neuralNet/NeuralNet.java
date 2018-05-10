@@ -24,12 +24,25 @@ class NeuralNet {
 			biases.add(randn(i, 1));
 		}
 		
-		
+		int x,y;
 		ArrayList<ArrayList<Integer>> zipped= new ArrayList<ArrayList<Integer>>();
-		//zipped = zip(zipped.subList(1,zipped.size()),zipped.subList(0,zipped.size()-1));
-		for (int i=1; i<nLayers; i++){
-			biases.add(randn(i, 1));
+		zipped = zip( subArrayList(size, 0, nLayers-1) ,  subArrayList(size, 1, nLayers));
+		for (int i=0; i<zipped.size(); i++){
+			x = zipped.get(i).get(0);
+			y = zipped.get(i).get(1);
+			weights.add(randn(y, x));
 		}
+	}
+	
+	public ArrayList<Integer> subArrayList(ArrayList<Integer> list, int lower, int upper){
+		
+		ArrayList<Integer> subList = new ArrayList<Integer>();
+		
+		for (int i=lower; i<upper; i++){
+			subList.add(list.get(i));
+		}
+		
+		return subList;
 	}
 	
 	public ArrayList<ArrayList<Double>> randn(int nList, int nRandom){
@@ -71,6 +84,7 @@ class NeuralNet {
 		
 		return zippedList;
 	}
+
 	private double sigmoid(){
 		//return 1.0 / (1.0 + Math.pow(Math.PI, b));
 		return 1.0;
