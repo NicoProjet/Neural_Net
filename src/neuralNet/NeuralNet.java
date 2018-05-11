@@ -23,14 +23,14 @@ class NeuralNet {
 
 		nLayers = givenSize.size();
 		sizes = givenSize;
-
-		for (int i=1; i<nLayers; i++){
-			biases.add(randn(i, 1));
-		}
-
 		int x,y;
 		ArrayList<ArrayList<Integer>> zipped= new ArrayList<ArrayList<Integer>>();
 		zipped = zip( subArrayList(sizes, 0, nLayers-1) ,  subArrayList(sizes, 1, nLayers));
+
+		for (int i=1; i<nLayers; i++){
+			biases.add(randn(sizes.get(i), 1));
+		}
+
 		for (int i=0; i<zipped.size(); i++){
 			x = zipped.get(i).get(0);
 			y = zipped.get(i).get(1);
@@ -59,7 +59,6 @@ class NeuralNet {
 		for (int i=0; i<nList; i++){
 			for (int j=0; j<nRandom; j++){
 				n = x.nextGaussian();
-				System.out.print(n);
 				listnRandom.add(n);
 			}
 			list.add(listnRandom);
@@ -110,11 +109,11 @@ class NeuralNet {
 		for (int nodeIndex = 0; nodeIndex<A.size();nodeIndex++){
 			ArrayList<Double> valueList = new ArrayList<Double>();
 			double value = 0;
-			 for (int weightIndex = 0; weightIndex<A.get(0).size(); weightIndex++){
-				 value += A.get(nodeIndex).get(weightIndex) * B.get(nodeIndex).get(0);
-			 }
-			 valueList.add(value);
-			 response.add(valueList);
+			for (int weightIndex = 0; weightIndex<A.get(0).size(); weightIndex++){
+				value += A.get(nodeIndex).get(weightIndex) * B.get(weightIndex).get(0);
+			}
+			valueList.add(value);
+			response.add(valueList);
 		}
 		return response;
 	}
@@ -144,7 +143,7 @@ class NeuralNet {
 	
 	
 	
-	private void gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate){
+	public void gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate){
 		// change label representation [double] => [false,true,false,false....] with true = (double) 1 and false = (double) 0
 		for (int dataIndex = 0; dataIndex<data.size(); dataIndex++){
 			int label = (int) data.get(dataIndex).get(1)[0];
@@ -204,6 +203,17 @@ class NeuralNet {
 			Deltas deltas = backPropagation(image, label);
 			ArrayList<ArrayList<ArrayList<Double>>> deltaBiases = deltas.deltaBiases;
 			ArrayList<ArrayList<ArrayList<Double>>> deltaWeights = deltas.deltaWeights;
+			System.out.println(deltaBiases);
+			System.out.println(deltaBiases.size());
+			System.out.println(deltaBiases.get(0).size());
+			System.out.println(deltaBiases.get(0).get(0).size());
+			System.out.println(deltaWeights);
+			System.out.println(deltaWeights.size());
+			System.out.println(deltaWeights.get(0).size());
+			System.out.println(deltaWeights.get(0).get(0).size());
+			System.out.println(sizes.size()-1);
+			System.out.println(sizes.get(0+1));
+			System.out.println(sizes.get(0));
 			for (int indexLayer = 0; indexLayer < sizes.size()-1; indexLayer++){
 				for (int indexNode = 0; indexNode < sizes.get(indexLayer+1); indexNode++){
 					newBiases.get(indexLayer).get(indexNode).set(0, newBiases.get(indexLayer).get(indexNode).get(0) + deltaBiases.get(indexLayer).get(indexNode).get(0));
@@ -244,6 +254,7 @@ class NeuralNet {
 			newWeights.add(newMatrixZeros(sizes.get(layerIndex+1), sizes.get(layerIndex)));
 		}
 		
+		
 		ArrayList<ArrayList<Double>> output = new ArrayList<ArrayList<Double>>();
 		ArrayList<ArrayList<ArrayList<Double>>> outputs = new ArrayList<ArrayList<ArrayList<Double>>>();
 		// fill output with image
@@ -253,7 +264,8 @@ class NeuralNet {
 			output.add(elem);
 		}
 		outputs.add(output);
-		// x represents the output of a perceptron
+		
+		// x represents the output of a perceptron = w*input + b
 		// output of our neural net: sigmoid = 1 / (1 + exp(-x))
 		ArrayList<ArrayList<ArrayList<Double>>> xList = new ArrayList<ArrayList<ArrayList<Double>>>();
 		ArrayList<ArrayList<Double>> x;
@@ -270,6 +282,15 @@ class NeuralNet {
 			labelElem.add(label[index]);
 			newLabel.add(labelElem);
 		}
+		System.out.println("LABEL");
+		System.out.println(newLabel);
+		System.out.println(newLabel.size());
+		System.out.println(newLabel.get(0).size());
+		
+		System.out.println("LIFE IS GOOD");
+		/*
+		 * CHECK THE MUL
+		 */
 		
 		
 		ArrayList<ArrayList<Double>> delta = mul(sub(outputs.get(outputs.size()-1), newLabel), sigmoidDerivative(xList.get(xList.size()-1)));
@@ -301,6 +322,16 @@ class NeuralNet {
 			input = sigmoid(add(mul(weights.get(layerIndex),input),biases.get(layerIndex)));
 		}
 		return input;
+	}
+	
+	public int guess(ArrayList<ArrayList<Double>> input){
+		ArrayList<ArrayList<Double>> output = feedForward(input);
+		int maxIndex = 0;
+		double max = (double) 0;
+		for(int index = 0; index<output.size();index++){
+			if (output.get(index).get(0) > max) {maxIndex = index;}
+		}
+		return maxIndex;
 	}
 	
 }

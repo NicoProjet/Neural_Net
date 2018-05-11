@@ -10,11 +10,12 @@ import org.apache.commons.io.IOUtils;
 class ReadMNIST {
 	public static int imageSize = 28;
 	
-	private static double[] byteArrayToDoubleArray(byte[] array, int headerSize){
+	private static double[] byteArrayToDoubleArray(byte[] array, int headerSize, boolean pixel){
 		double[] doubleArray = new double[array.length-headerSize];
 		for (int i=0; i<array.length-headerSize; i++){
 			int intValue = array[i+headerSize] & 0xff;
-			doubleArray[i] = (double) intValue;
+			if (pixel) doubleArray[i] = (double) intValue / 255;
+			else doubleArray[i] = (double) intValue;
 		}
 		return doubleArray;
 	}
@@ -22,9 +23,9 @@ class ReadMNIST {
 	public static double[] readLabels(int numberOfLabels) throws IOException{
 		File MNIST_labels = new File("data/train-labels.idx1-ubyte");
 		InputStream fileStream = new FileInputStream(MNIST_labels);
-		byte[] byteArray = IOUtils.toByteArray(fileStream, numberOfLabels);
 		int headerSize = 8;
-		return byteArrayToDoubleArray(byteArray, headerSize);
+		byte[] byteArray = IOUtils.toByteArray(fileStream, numberOfLabels+headerSize);
+		return byteArrayToDoubleArray(byteArray, headerSize, false);
 	}
 	
 	public static double[] readImages(int numberOfImages) throws IOException{
@@ -33,7 +34,7 @@ class ReadMNIST {
 		int headerSize = 16;
 		int bytesToGet = numberOfImages * imageSize * imageSize + headerSize;
 		byte[] byteArray =  IOUtils.toByteArray(fileStream, bytesToGet);
-		return byteArrayToDoubleArray(byteArray, headerSize);
+		return byteArrayToDoubleArray(byteArray, headerSize, true);
 	}
 
 }
