@@ -117,6 +117,18 @@ class NeuralNet {
 		}
 		return response;
 	}
+	
+	private ArrayList<ArrayList<Double>> matrixMul(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+		ArrayList<ArrayList<Double>> response = newMatrixZeros(A.size(), B.get(0).size());
+		for (int i=0; i<A.size();i++){
+			for (int j=0; j<B.get(0).size();j++){
+				for (int k=0; k<A.get(0).size();k++){
+					response.get(i).set(j, response.get(i).get(j) + A.get(i).get(k) + B.get(k).get(j));
+				}
+			}
+		}
+		return response;
+	}
 
 	private ArrayList<ArrayList<Double>> sigmoid(ArrayList<ArrayList<Double>> A){
 		ArrayList<ArrayList<Double>> response = new ArrayList<ArrayList<Double>>();
@@ -197,23 +209,22 @@ class NeuralNet {
 			newBiases.add(newMatrixZeros(sizes.get(layerIndex+1), 1)); // sizes.get(layerIndex+1) = current layer size 
 			newWeights.add(newMatrixZeros(sizes.get(layerIndex+1), sizes.get(layerIndex))); //sizes.get(layerIndex) = previous layer size
 		}
+		/*
+		double[] image = batch.get(0).get(0);
+		double[] label = batch.get(0).get(1);
+		Deltas deltas = backPropagation(image, label);
+		printArrayList(newBiases.get(0));
+		printArrayList(deltas.deltaBiases.get(0));
+		*/
 		for (int batchIndex = 0; batchIndex < batch.size(); batchIndex++){
 			double[] image = batch.get(batchIndex).get(0);
 			double[] label = batch.get(batchIndex).get(1);
 			Deltas deltas = backPropagation(image, label);
 			ArrayList<ArrayList<ArrayList<Double>>> deltaBiases = deltas.deltaBiases;
 			ArrayList<ArrayList<ArrayList<Double>>> deltaWeights = deltas.deltaWeights;
-			System.out.println(deltaBiases);
-			System.out.println(deltaBiases.size());
-			System.out.println(deltaBiases.get(0).size());
-			System.out.println(deltaBiases.get(0).get(0).size());
-			System.out.println(deltaWeights);
-			System.out.println(deltaWeights.size());
-			System.out.println(deltaWeights.get(0).size());
-			System.out.println(deltaWeights.get(0).get(0).size());
-			System.out.println(sizes.size()-1);
-			System.out.println(sizes.get(0+1));
-			System.out.println(sizes.get(0));
+			
+			//printArrayList(deltaWeights.get(1));
+			//printArrayList(newWeights.get(1));
 			for (int indexLayer = 0; indexLayer < sizes.size()-1; indexLayer++){
 				for (int indexNode = 0; indexNode < sizes.get(indexLayer+1); indexNode++){
 					newBiases.get(indexLayer).get(indexNode).set(0, newBiases.get(indexLayer).get(indexNode).get(0) + deltaBiases.get(indexLayer).get(indexNode).get(0));
@@ -281,33 +292,64 @@ class NeuralNet {
 			ArrayList<Double> labelElem = new ArrayList<Double>();
 			labelElem.add(label[index]);
 			newLabel.add(labelElem);
-		}
-		System.out.println("LABEL");
-		System.out.println(newLabel);
-		System.out.println(newLabel.size());
-		System.out.println(newLabel.get(0).size());
-		
-		System.out.println("LIFE IS GOOD");
-		/*
-		 * CHECK THE MUL
-		 */
-		
+		}		
 		
 		ArrayList<ArrayList<Double>> delta = mul(sub(outputs.get(outputs.size()-1), newLabel), sigmoidDerivative(xList.get(xList.size()-1)));
 		
+		// setters corrects
 		newBiases.set(newBiases.size()-1, delta);
-		newWeights.set(newWeights.size()-1, mul(delta, transpose(outputs.get(outputs.size()-2))));
+		//printArrayList(mul(delta, transpose(outputs.get(outputs.size()-2))));
+		newWeights.set(newWeights.size()-1, matrixMul(delta, transpose(outputs.get(outputs.size()-2))));
+		/*
+		System.out.println("should be 10x1");
+		printArrayList(delta);
+		System.out.println("should be 1x30");
+		printArrayList(transpose(outputs.get(outputs.size()-2)));
+		System.out.println("should be 10x30");
+		printArrayList(newWeights.get(1));
+		*/
 		
-		// Check mul ...
 		for (int layerIndex = 2; layerIndex<sizes.size();layerIndex++){
 			x = xList.get(xList.size()-layerIndex);
-			delta = mul(mul(delta, transpose(outputs.get(outputs.size()-layerIndex+1))), sigmoidDerivative(x));
+			/*
+			System.out.println("\ncurrent delta");
+			printArrayList(delta);
+			System.out.println("\nnon tranpose");
+			printArrayList(weights.get(weights.size()-layerIndex+1));
+			System.out.println("\ntranpose");
+			printArrayList(transpose(weights.get(weights.size()-layerIndex+1)));
+			System.out.println("\ncurrent delta*tranpose");
+			printArrayList(mul(delta, transpose(weights.get(weights.size()-layerIndex+1))));
+			System.out.println("\nsigmoid derivative");
+			printArrayList(sigmoidDerivative(x));
+			System.out.println("\n(current delta * transpose) * sigmoid derivative");
+			printArrayList(mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x)));
+			*/
+			delta = mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x));
 			newBiases.set(newBiases.size()-layerIndex, delta);
-			newWeights.set(newWeights.size()-layerIndex, mul(delta, transpose(outputs.get(outputs.size()-layerIndex-1))));
+			newWeights.set(newWeights.size()-layerIndex, matrixMul(delta, transpose(outputs.get(outputs.size()-layerIndex-1))));
 		}
+		// should be 30x1 and 10x1 (too many 0 in 30x1?)
+		//printArrayList3D(newBiases);
+
 		
 		Deltas deltas = new Deltas(newBiases, newWeights);
 		return deltas;
+	}
+	
+	static void printArrayList(ArrayList<ArrayList<Double>> A){
+		String text = String.format("matrix of size %1$d x %2$d", A.size(), A.get(0).size());
+		System.out.println(text);
+		for(int i =0; i < A.size(); i++){
+			System.out.println(A.get(i));
+		}
+	}
+	static void printArrayList3D(ArrayList<ArrayList<ArrayList<Double>>> A){
+		for(int i =0; i < A.size(); i++){
+			System.out.print("\nLAYER");
+			System.out.println(i);
+			printArrayList(A.get(i));
+		}
 	}
 	
 	
@@ -324,12 +366,15 @@ class NeuralNet {
 		return input;
 	}
 	
-	public int guess(ArrayList<ArrayList<Double>> input){
+	int guess(ArrayList<ArrayList<Double>> input){
 		ArrayList<ArrayList<Double>> output = feedForward(input);
 		int maxIndex = 0;
 		double max = (double) 0;
 		for(int index = 0; index<output.size();index++){
-			if (output.get(index).get(0) > max) {maxIndex = index;}
+			if (output.get(index).get(0) > max) {
+				maxIndex = index;
+				max = output.get(index).get(0);
+			}
 		}
 		return maxIndex;
 	}

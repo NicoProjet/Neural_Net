@@ -6,15 +6,12 @@ import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		System.out.println("hello");
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		sizes.add(784); sizes.add(30); sizes.add(10);
 		NeuralNet net = new NeuralNet(sizes);
-		System.out.println("I have a neural net");
-		System.out.println("You jelly?");
 		// gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate)
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 10;
+		int numberOfImages = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages);
 		double[] labels = ReadMNIST.readLabels(numberOfImages);
 		for (int i=0; i<numberOfImages; i++){
@@ -29,11 +26,17 @@ public class Main {
 			pixel.add(images[i]);
 			input.add(pixel);
 		}
+		for (int i=0; i<28; i++){
+			for (int j=0;j<28;j++){
+				System.out.print(String.format("%.2f", input.get(i*28+j).get(0)));
+			}
+			System.out.println();
+		}
 		
 		System.out.println("feed start");
 		System.out.println(net.guess(input));
 		System.out.println("grad desc start");
-		net.gradientDescent(data, 5, 2, 3.0);
+		net.gradientDescent(data, 20, 10, 3.0);
 		System.out.println("second feed start");
 		System.out.println(net.guess(input));
 		
