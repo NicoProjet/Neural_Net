@@ -326,6 +326,7 @@ class NeuralNet {
 			printArrayList(mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x)));
 			*/
 			delta = mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x));
+			printArrayList(delta);
 			newBiases.set(newBiases.size()-layerIndex, delta);
 			newWeights.set(newWeights.size()-layerIndex, matrixMul(delta, transpose(outputs.get(outputs.size()-layerIndex-1))));
 		}

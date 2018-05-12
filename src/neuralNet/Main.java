@@ -36,7 +36,7 @@ public class Main {
 		System.out.println("feed start");
 		System.out.println(net.guess(input));
 		System.out.println("grad desc start");
-		net.gradientDescent(data, 20, 10, 3.0);
+		net.gradientDescent(data, 1, 10, 3.0);
 		System.out.println("second feed start");
 		System.out.println(net.guess(input));
 		
