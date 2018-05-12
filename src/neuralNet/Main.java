@@ -11,14 +11,22 @@ public class Main {
 		NeuralNet net = new NeuralNet(sizes);
 		// gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate)
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
+		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
 		int numberOfImages = 100;
-		double[] images = ReadMNIST.readImages(numberOfImages);
-		double[] labels = ReadMNIST.readLabels(numberOfImages);
+		int numberOfTests = 10;
+		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
+		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
 		for (int i=0; i<numberOfImages; i++){
 			ArrayList<double[]> singleData = new ArrayList<double[]>();
 			singleData.add(Arrays.copyOfRange(images, i*784, (i+1)*784));
 			singleData.add(Arrays.copyOfRange(labels, i, i+1));
 			data.add(singleData);
+		}
+		for (int i=0; i<numberOfTests; i++){
+			ArrayList<double[]> singleData = new ArrayList<double[]>();
+			singleData.add(Arrays.copyOfRange(images, (numberOfImages+i)*784, (numberOfImages+i+1)*784));
+			singleData.add(Arrays.copyOfRange(labels, numberOfImages+i, numberOfImages+i+1));
+			testData.add(singleData);
 		}
 		ArrayList<ArrayList<Double>> input = new ArrayList<ArrayList<Double>>();
 		for (int i=0; i<784; i++){
@@ -36,7 +44,7 @@ public class Main {
 		System.out.println("feed start");
 		System.out.println(net.guess(input));
 		System.out.println("grad desc start");
-		net.gradientDescent(data, 1, 10, 3.0);
+		net.gradientDescent(data, 15, 10, 3.0, testData);
 		System.out.println("second feed start");
 		System.out.println(net.guess(input));
 		

@@ -150,12 +150,12 @@ class NeuralNet {
 			}
 			OnesList.add(line);
 		}
-		return mul(sigmoid(A), sub(OnesList, sigmoid(A)));
+		return matrixMul(sigmoid(A), sub(OnesList, sigmoid(A)));
 	}
 	
 	
 	
-	public void gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate){
+	public void gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate, ArrayList<ArrayList<double[]>> testData){
 		// change label representation [double] => [false,true,false,false....] with true = (double) 1 and false = (double) 0
 		for (int dataIndex = 0; dataIndex<data.size(); dataIndex++){
 			int label = (int) data.get(dataIndex).get(1)[0];
@@ -176,7 +176,8 @@ class NeuralNet {
 			for (ArrayList<ArrayList<double[]>> batch : batches){
 				updateBatch(batch, learningRate);
 			}
-			System.out.println("Completed iteration "+i );
+			System.out.print("Completed iteration "+(i+1)+" with " );
+			System.out.println(evaluate(testData) + "% success");
 		}
 	}
 	
@@ -281,7 +282,7 @@ class NeuralNet {
 		ArrayList<ArrayList<ArrayList<Double>>> xList = new ArrayList<ArrayList<ArrayList<Double>>>();
 		ArrayList<ArrayList<Double>> x;
 		for (int layerIndex = 0; layerIndex <sizes.size()-1; layerIndex++){ // layerIndex starts at second layer
-			x = add(mul(weights.get(layerIndex), output),biases.get(layerIndex));
+			x = add(matrixMul(weights.get(layerIndex), output),biases.get(layerIndex));
 			xList.add(x);
 			output = sigmoid(x);
 			outputs.add(output);
@@ -294,11 +295,12 @@ class NeuralNet {
 			newLabel.add(labelElem);
 		}		
 		
-		ArrayList<ArrayList<Double>> delta = mul(sub(outputs.get(outputs.size()-1), newLabel), sigmoidDerivative(xList.get(xList.size()-1)));
+		ArrayList<ArrayList<Double>> delta = matrixMul(sub(outputs.get(outputs.size()-1), newLabel), sigmoidDerivative(xList.get(xList.size()-1)));
+		//printArrayList(delta);
 		
 		// setters corrects
 		newBiases.set(newBiases.size()-1, delta);
-		//printArrayList(mul(delta, transpose(outputs.get(outputs.size()-2))));
+		//printArrayList(matrixMul(delta, transpose(outputs.get(outputs.size()-2))));
 		newWeights.set(newWeights.size()-1, matrixMul(delta, transpose(outputs.get(outputs.size()-2))));
 		/*
 		System.out.println("should be 10x1");
@@ -319,14 +321,14 @@ class NeuralNet {
 			System.out.println("\ntranpose");
 			printArrayList(transpose(weights.get(weights.size()-layerIndex+1)));
 			System.out.println("\ncurrent delta*tranpose");
-			printArrayList(mul(delta, transpose(weights.get(weights.size()-layerIndex+1))));
+			printArrayList(matrixMul(delta, transpose(weights.get(weights.size()-layerIndex+1))));
 			System.out.println("\nsigmoid derivative");
 			printArrayList(sigmoidDerivative(x));
 			System.out.println("\n(current delta * transpose) * sigmoid derivative");
-			printArrayList(mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x)));
+			printArrayList(matrixMul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x)));
 			*/
-			delta = mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x));
-			printArrayList(delta);
+			delta = matrixMul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x));
+			//printArrayList(delta);
 			newBiases.set(newBiases.size()-layerIndex, delta);
 			newWeights.set(newWeights.size()-layerIndex, matrixMul(delta, transpose(outputs.get(outputs.size()-layerIndex-1))));
 		}
@@ -362,13 +364,29 @@ class NeuralNet {
 	public ArrayList<ArrayList<Double>> feedForward(ArrayList<ArrayList<Double>> input){
 		// input is (n, 1)
 		for (int layerIndex = 0; layerIndex <sizes.size()-1; layerIndex++){ // layerIndex starts at second layer
-			input = sigmoid(add(mul(weights.get(layerIndex),input),biases.get(layerIndex)));
+			input = sigmoid(add(matrixMul(weights.get(layerIndex),input),biases.get(layerIndex)));
 		}
 		return input;
 	}
 	
+	public double evaluate(ArrayList<ArrayList<double[]>> testData){
+		double numberOfTests = (double) testData.size();
+		double numberOfSuccess = 0.0;
+		for (ArrayList<double[]> test : testData){
+			ArrayList<ArrayList<Double>> input = new ArrayList<ArrayList<Double>>();
+			for (int pixelIndex = 0; pixelIndex < test.get(0).length; pixelIndex++){
+				ArrayList<Double> elem = new ArrayList<Double>();
+				elem.add(test.get(0)[pixelIndex]);
+				input.add(elem);
+			}
+			if (guess(input) == (int) test.get(1)[0]){numberOfSuccess++;}
+		}
+		return (numberOfSuccess/numberOfTests)*100;
+	}
+	
 	int guess(ArrayList<ArrayList<Double>> input){
 		ArrayList<ArrayList<Double>> output = feedForward(input);
+		//printArrayList(output);
 		int maxIndex = 0;
 		double max = (double) 0;
 		for(int index = 0; index<output.size();index++){
