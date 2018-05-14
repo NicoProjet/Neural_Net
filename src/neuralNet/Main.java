@@ -53,6 +53,41 @@ public class Main {
 		NeuralNet.printArrayList(NeuralNet.mul(NeuralNet.sigmoid(test), NeuralNet.sub(OnesList, NeuralNet.sigmoid(test))));
 		*/
 		
+		/* 4x3 3x1 4x1
+		ArrayList<ArrayList<Double>> w = new ArrayList<ArrayList<Double>>();
+		ArrayList<ArrayList<Double>> a = new ArrayList<ArrayList<Double>>();
+		ArrayList<ArrayList<Double>> b = new ArrayList<ArrayList<Double>>();
+		ArrayList<ArrayList<Double>> r = new ArrayList<ArrayList<Double>>();
+		for (int i=0;i<4;i++){
+			ArrayList<Double> line = new ArrayList<Double>();
+			for (int j=0; j<3; j++){
+				line.add((double) i*3+j+1);
+			}
+			w.add(line);
+		}
+		NeuralNet.printArrayList(w);
+		
+		for (int i=0; i<3; i++){
+			ArrayList<Double> line = new ArrayList<Double>();
+			for (int j=0; j<1; j++){
+				line.add((double) i*1+j+1);
+			}
+			a.add(line);
+		}
+		NeuralNet.printArrayList(a);
+		
+		for (int i=0; i<4; i++){
+			ArrayList<Double> line = new ArrayList<Double>();
+			for (int j=0; j<1; j++){
+				line.add((double) i*1+j+1);
+			}
+			b.add(line);
+		}
+		NeuralNet.printArrayList(b);
+		NeuralNet.printArrayList(NeuralNet.matrixMul(w,a));
+		r = NeuralNet.matrixAdd(NeuralNet.matrixMul(w,a),b);
+		NeuralNet.printArrayList(r);
+		*/
 		
 		
 		
@@ -63,8 +98,8 @@ public class Main {
 		// gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate)
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 100;
-		int numberOfTests = 10;
+		int numberOfImages = 5000;
+		int numberOfTests = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
 		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
 		for (int i=0; i<numberOfImages; i++){

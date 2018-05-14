@@ -120,7 +120,7 @@ class NeuralNet {
 		return response;
 	}
 	
-	private ArrayList<ArrayList<Double>> matrixAdd(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+	static ArrayList<ArrayList<Double>> matrixAdd(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
 		ArrayList<ArrayList<Double>> response = new ArrayList<ArrayList<Double>>();
 		for (int line=0; line<A.size();line++){
 			ArrayList<Double> responseLine = new ArrayList<Double>();
@@ -132,7 +132,7 @@ class NeuralNet {
 		return response;
 	}
 	
-	private ArrayList<ArrayList<Double>> matrixSub(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+	static ArrayList<ArrayList<Double>> matrixSub(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
 		ArrayList<ArrayList<Double>> response = new ArrayList<ArrayList<Double>>();
 		for (int line=0; line<A.size();line++){
 			ArrayList<Double> responseLine = new ArrayList<Double>();
@@ -144,13 +144,13 @@ class NeuralNet {
 		return response;
 	}
 	
-	private ArrayList<ArrayList<Double>> matrixMul(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
+	static ArrayList<ArrayList<Double>> matrixMul(ArrayList<ArrayList<Double>> A, ArrayList<ArrayList<Double>> B){
 		if(A.get(0).size() == B.size()){
 			ArrayList<ArrayList<Double>> response = newMatrixZeros(A.size(), B.get(0).size());
 			for (int i=0; i<A.size();i++){
 				for (int j=0; j<B.get(0).size();j++){
 					for (int k=0; k<A.get(0).size();k++){
-						response.get(i).set(j, response.get(i).get(j) + A.get(i).get(k) + B.get(k).get(j));
+						response.get(i).set(j, response.get(i).get(j) + A.get(i).get(k) * B.get(k).get(j));
 					}
 				}
 			}
@@ -217,7 +217,7 @@ class NeuralNet {
 		}
 	}
 	
-	private ArrayList<ArrayList<Double>> newMatrixZeros(int m, int n){
+	private static ArrayList<ArrayList<Double>> newMatrixZeros(int m, int n){
 		ArrayList<ArrayList<Double>> newMatrix = new ArrayList<ArrayList<Double>>();
 		for (int i = 0; i<m; i++){
 			ArrayList<Double> line = new ArrayList<Double>();
@@ -354,13 +354,15 @@ class NeuralNet {
 			x = xList.get(xList.size()-layerIndex);
 			//printArrayList(sigmoidDerivative(x));
 			//printArrayList(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta));
+			/*
 			System.out.println("\n\n");
 			printArrayList(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta));
 			printArrayList(x);
 			printArrayList(sigmoidDerivative(x));
+			*/
 			delta = mul(matrixMul(transpose(weights.get(weights.size()-layerIndex+1)), delta), sigmoidDerivative(x));
-			printArrayList(delta);
-			System.out.println("\n\n");
+			//printArrayList(delta);
+			//System.out.println("\n\n");
 			newBiases.set(newBiases.size()-layerIndex, delta);
 			newWeights.set(newWeights.size()-layerIndex, matrixMul(delta, transpose(outputs.get(outputs.size()-layerIndex-1))));
 		}
