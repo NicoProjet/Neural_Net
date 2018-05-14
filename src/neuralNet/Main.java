@@ -6,6 +6,57 @@ import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
+		/*
+		ArrayList<ArrayList<Double>> test = new ArrayList<ArrayList<Double>>();
+		ArrayList<Double> line = new ArrayList<Double>();
+		line.add((double) -2.74051506);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -6.40527438);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -1.66373931);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -9.18389012);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -0.88628164);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -6.9870387);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -5.73383871);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -4.44236584);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -5.16724836);
+		test.add(line);
+		line = new ArrayList<Double>();
+		line.add((double) -6.18543175);
+		test.add(line);
+		NeuralNet.printArrayList(NeuralNet.sigmoid(test));
+		
+		ArrayList<ArrayList<Double>> OnesList = new ArrayList<ArrayList<Double>>();
+		for (int i = 0; i<test.size();i++){
+			ArrayList<Double> line0 = new ArrayList<Double>();
+			for (int j=0; j<test.get(0).size();j++){
+				line0.add((double) 1);
+			}
+			OnesList.add(line0);
+		}
+		NeuralNet.printArrayList(OnesList);
+		NeuralNet.printArrayList(NeuralNet.sub(OnesList, NeuralNet.sigmoid(test)));
+		NeuralNet.printArrayList(NeuralNet.mul(NeuralNet.sigmoid(test), NeuralNet.sub(OnesList, NeuralNet.sigmoid(test))));
+		*/
+		
+		
+		
+		
+		
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		sizes.add(784); sizes.add(30); sizes.add(10);
 		NeuralNet net = new NeuralNet(sizes);
@@ -40,6 +91,7 @@ public class Main {
 			}
 			System.out.println();
 		}
+		
 		
 		System.out.println("feed start");
 		System.out.println(net.guess(input));
