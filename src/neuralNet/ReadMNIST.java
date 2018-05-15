@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 class ReadMNIST {
 	public static int imageSize = 28;
 	
-	private static double[] byteArrayToDoubleArray(byte[] array, int headerSize, boolean pixel){
+	public static double[] byteArrayToDoubleArray(byte[] array, int headerSize, boolean pixel){
 		double[] doubleArray = new double[array.length-headerSize];
 		for (int i=0; i<array.length-headerSize; i++){
 			int intValue = array[i+headerSize] & 0xff;

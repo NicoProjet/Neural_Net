@@ -365,7 +365,7 @@ class NeuralNet {
 			}
 			if (guess(input) == (int) test.get(1)[0]){numberOfSuccess++;}
 		}
-		return (numberOfSuccess/numberOfTests)*100;
+		return (numberOfSuccess/numberOfTests)*numberOfTests;
 	}
 	
 	public int guess(ArrayList<ArrayList<Double>> input){
