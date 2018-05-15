@@ -66,7 +66,7 @@ public class Main {
 			} else{
 				File imageFile = new File("data/"+userInput);
 				BufferedImage image = ImageIO.read(imageFile);
-				ArrayList<ArrayList<Double>> imageMatrix = getImageFromBmp(image);
+				ArrayList<ArrayList<Double>> imageMatrix = getImageFromJPG(image);
 				int guess = net.guess(imageMatrix);
 				System.out.println("Your image was a "+guess);
 			}
@@ -90,7 +90,7 @@ public class Main {
 		}
 	}
 	
-	private static ArrayList<ArrayList<Double>> getImageFromBmp(BufferedImage image) {
+	private static ArrayList<ArrayList<Double>> getImageFromJPG(BufferedImage image) {
 		int width = image.getWidth();
 		int height = image.getHeight();
 		ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
