@@ -6,96 +6,9 @@ import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		/*
-		ArrayList<ArrayList<Double>> test = new ArrayList<ArrayList<Double>>();
-		ArrayList<Double> line = new ArrayList<Double>();
-		line.add((double) -2.74051506);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -6.40527438);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -1.66373931);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -9.18389012);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -0.88628164);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -6.9870387);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -5.73383871);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -4.44236584);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -5.16724836);
-		test.add(line);
-		line = new ArrayList<Double>();
-		line.add((double) -6.18543175);
-		test.add(line);
-		NeuralNet.printArrayList(NeuralNet.sigmoid(test));
-		
-		ArrayList<ArrayList<Double>> OnesList = new ArrayList<ArrayList<Double>>();
-		for (int i = 0; i<test.size();i++){
-			ArrayList<Double> line0 = new ArrayList<Double>();
-			for (int j=0; j<test.get(0).size();j++){
-				line0.add((double) 1);
-			}
-			OnesList.add(line0);
-		}
-		NeuralNet.printArrayList(OnesList);
-		NeuralNet.printArrayList(NeuralNet.sub(OnesList, NeuralNet.sigmoid(test)));
-		NeuralNet.printArrayList(NeuralNet.mul(NeuralNet.sigmoid(test), NeuralNet.sub(OnesList, NeuralNet.sigmoid(test))));
-		*/
-		
-		/* 4x3 3x1 4x1
-		ArrayList<ArrayList<Double>> w = new ArrayList<ArrayList<Double>>();
-		ArrayList<ArrayList<Double>> a = new ArrayList<ArrayList<Double>>();
-		ArrayList<ArrayList<Double>> b = new ArrayList<ArrayList<Double>>();
-		ArrayList<ArrayList<Double>> r = new ArrayList<ArrayList<Double>>();
-		for (int i=0;i<4;i++){
-			ArrayList<Double> line = new ArrayList<Double>();
-			for (int j=0; j<3; j++){
-				line.add((double) i*3+j+1);
-			}
-			w.add(line);
-		}
-		NeuralNet.printArrayList(w);
-		
-		for (int i=0; i<3; i++){
-			ArrayList<Double> line = new ArrayList<Double>();
-			for (int j=0; j<1; j++){
-				line.add((double) i*1+j+1);
-			}
-			a.add(line);
-		}
-		NeuralNet.printArrayList(a);
-		
-		for (int i=0; i<4; i++){
-			ArrayList<Double> line = new ArrayList<Double>();
-			for (int j=0; j<1; j++){
-				line.add((double) i*1+j+1);
-			}
-			b.add(line);
-		}
-		NeuralNet.printArrayList(b);
-		NeuralNet.printArrayList(NeuralNet.matrixMul(w,a));
-		r = NeuralNet.matrixAdd(NeuralNet.matrixMul(w,a),b);
-		NeuralNet.printArrayList(r);
-		*/
-		
-		
-		
-		
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		sizes.add(784); sizes.add(30); sizes.add(10);
 		NeuralNet net = new NeuralNet(sizes);
-		// gradientDescent(ArrayList<ArrayList<double[]>> data, int iteration, int batchSize, double learningRate)
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
 		int numberOfImages = 5000;
