@@ -15,7 +15,7 @@ public class Main {
 		NeuralNet net = new NeuralNet(sizes);
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 10000;
+		int numberOfImages = 8000;
 		int numberOfTests = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
 		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
