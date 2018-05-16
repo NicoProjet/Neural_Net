@@ -15,7 +15,7 @@ public class Main {
 		NeuralNet net = new NeuralNet(sizes);
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 100;
+		int numberOfImages = 3500;
 		int numberOfTests = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
 		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
@@ -31,28 +31,12 @@ public class Main {
 			singleData.add(Arrays.copyOfRange(labels, numberOfImages+i, numberOfImages+i+1));
 			testData.add(singleData);
 		}
-		ArrayList<ArrayList<Double>> input = new ArrayList<ArrayList<Double>>();
-		for (int i=0; i<784; i++){
-			ArrayList<Double> pixel = new ArrayList<Double>();
-			pixel.add(images[i]);
-			input.add(pixel);
-		}
-		for (int i=0; i<28; i++){
-			for (int j=0;j<28;j++){
-				System.out.print(String.format("%.2f", input.get(i*28+j).get(0)));
-			}
-			System.out.println();
-		}
 		
 		
-		System.out.println("feed start");
-		System.out.println(net.guess(input));
 		System.out.println("grad desc start");
-		//net.gradientDescent(data, 5, 10, 3.0, testData);
-		System.out.println("second feed start");
-		System.out.println(net.guess(input));
-		//net._save();
-		net._import();
+		net.gradientDescent(data, 10, 10, 3.0, testData);
+		net._save();
+		//net._import();
 		
 		String userInput = "";
 		boolean _continue = true;
