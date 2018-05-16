@@ -15,7 +15,7 @@ public class Main {
 		NeuralNet net = new NeuralNet(sizes);
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 3500;
+		int numberOfImages = 10000;
 		int numberOfTests = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
 		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
@@ -33,10 +33,10 @@ public class Main {
 		}
 		
 		
+		net._import();
 		System.out.println("grad desc start");
-		net.gradientDescent(data, 10, 10, 3.0, testData);
+		net.gradientDescent(data, 1, 10, 3.0, testData);
 		net._save();
-		//net._import();
 		
 		String userInput = "";
 		boolean _continue = true;
