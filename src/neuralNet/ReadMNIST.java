@@ -23,7 +23,7 @@ class ReadMNIST {
 	public static double[] readLabels(int numberOfLabels) throws IOException{
 		File MNIST_labels = new File("data/train-labels.idx1-ubyte");
 		InputStream fileStream = new FileInputStream(MNIST_labels);
-		int headerSize = 8;
+		int headerSize = 8+10000;
 		byte[] byteArray = IOUtils.toByteArray(fileStream, numberOfLabels+headerSize);
 		return byteArrayToDoubleArray(byteArray, headerSize, false);
 	}
@@ -31,7 +31,7 @@ class ReadMNIST {
 	public static double[] readImages(int numberOfImages) throws IOException{
 		File MNIST_images = new File("data/train-images.idx3-ubyte");
 		InputStream fileStream = new FileInputStream(MNIST_images);
-		int headerSize = 16;
+		int headerSize = 16+10000*784;
 		int bytesToGet = numberOfImages * imageSize * imageSize + headerSize;
 		byte[] byteArray =  IOUtils.toByteArray(fileStream, bytesToGet);
 		return byteArrayToDoubleArray(byteArray, headerSize, true);

@@ -15,7 +15,7 @@ public class Main {
 		NeuralNet net = new NeuralNet(sizes);
 		ArrayList<ArrayList<double[]>> data = new ArrayList<ArrayList<double[]>>();
 		ArrayList<ArrayList<double[]>> testData = new ArrayList<ArrayList<double[]>>();
-		int numberOfImages = 8000;
+		int numberOfImages = 20;
 		int numberOfTests = 100;
 		double[] images = ReadMNIST.readImages(numberOfImages+numberOfTests);
 		double[] labels = ReadMNIST.readLabels(numberOfImages+numberOfTests);
@@ -33,10 +33,15 @@ public class Main {
 		}
 		
 		
+		
+		
 		net._import();
-		System.out.println("grad desc start");
-		net.gradientDescent(data, 1, 10, 3.0, testData);
-		net._save();
+		printImageVector(images, labels);
+		//net.gradientDescent(data, 3, 10, 1.5, testData);
+		//net._save();
+		
+		
+		
 		
 		String userInput = "";
 		boolean _continue = true;
@@ -65,12 +70,18 @@ public class Main {
 		System.out.println();
 	}
 	
-	public static void printImageVector(double[] vector){
-		for (int i = 0; i<(vector.length/28); i++){
-			for (int pixel = 0; pixel<28; pixel++){
-				System.out.print(String.format("%.2f", vector[i])+ " ");
+	public static void printImageVector(double[] vector, double[] labels){
+		for (int k = 0; k<vector.length / 784; k++){
+			System.out.println("------------------------");
+			System.out.println(labels[k]);
+			System.out.println("------------------------");
+			for (int i = 0; i<28; i++){
+				for (int pixel = 0; pixel<28; pixel++){
+					System.out.print(String.format("%.2f", vector[k*784+i*28+pixel])+ " ");
+				}
+				System.out.println();
 			}
-			System.out.println();
+		System.out.println("------------------------");
 		}
 	}
 	
